@@ -30,10 +30,7 @@ type ViewState = 'login' | 'signup' | 'workspace' | 'guide';
 function App() {
   // Global State
   const [activeView, setActiveView] = useState<ViewState>('signup');
-  const [currentUser, setCurrentUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem('omni-context-user');
-    return saved ? JSON.parse(saved) : null;
-  });
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   
   // App State
   const [profiles, setProfiles] = useState<Profile[]>([]);
@@ -89,12 +86,10 @@ function App() {
 
   useEffect(() => {
     if (currentUser) {
-      localStorage.setItem('omni-context-user', JSON.stringify(currentUser));
       if (activeView === 'login' || activeView === 'signup') {
         setActiveView('workspace');
       }
     } else {
-      localStorage.removeItem('omni-context-user');
       if (activeView === 'workspace' || activeView === 'guide') {
         setActiveView('signup');
       }
