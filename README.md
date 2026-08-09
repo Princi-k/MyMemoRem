@@ -1,32 +1,55 @@
-# React + TypeScript + Vite
+# 🧠 MyMemoRem
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+**MyMemoRem** is a powerful context-handoff utility built for developers who seamlessly switch between multiple AI agents. 
 
-Currently, two official plugins are available:
+Instead of manually copy-pasting code snippets and explaining your project goals over and over every time you switch from ChatGPT to Gemini or Claude, MyMemoRem automates the entire onboarding process. 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Simply upload your raw chat history PDFs. MyMemoRem leverages **Google's Gemini 3.5 Native Multimodal API** to securely read and extract your exact tech stack, overall project goals, and immediate blockers. It instantly generates a perfect "System Prompt" that you can feed into your next AI agent so it can pick up exactly where you left off.
 
-## React Compiler
+## ✨ Features
+- **Native PDF Processing**: Uses Gemini's Multimodal Engine to flawlessly read and understand highly-formatted chat logs without relying on brittle OCR scrapers.
+- **Batch Processing**: Upload dozens of chat logs at once; the AI synthesizes them into a single coherent project state.
+- **Dark Neumorphism UI**: A stunning, custom-built physics-based soft UI design system that feels premium and tactile.
+- **Automated Project Naming**: The AI automatically deduces a creative project name based on your code and context.
+- **Frictionless Handoff**: 1-click copy-to-clipboard for the generated AI system prompt.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Tech Stack
+- **Frontend**: React 19, TypeScript, Vite, Vanilla CSS (Custom Neumorphic Design System)
+- **Backend**: Node.js, Express, Multer (Memory Storage)
+- **AI Integration**: `@google/generative-ai` (Gemini 3.5 Flash Multimodal)
+- **State Management**: LocalStorage for Mock Authentication and persistent workspace sessions.
 
-## Expanding the Oxlint configuration
+## 🚀 How to Run Locally
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+1. **Clone the repository**
+```bash
+git clone https://github.com/YourUsername/MyMemoRem.git
+cd MyMemoRem
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+2. **Install dependencies**
+```bash
+npm install
+```
+
+3. **Set up Environment Variables**
+Create a `.env` file in the root directory and add your Gemini API Key:
+```env
+VITE_GEMINI_API_KEY=your_api_key_here
+```
+
+4. **Start the Backend Server**
+```bash
+node server.js
+```
+*(Runs on http://localhost:3000)*
+
+5. **Start the Frontend Application**
+Open a new terminal and run:
+```bash
+npm run dev
+```
+*(Runs on http://localhost:5173)*
+
+## 💡 Designed for Hackathons
+This project was built rapidly with a focus on solving a very real developer pain point: context fragmentation across AI tools. It features a complete Mock Authentication flow for rapid demonstration.
