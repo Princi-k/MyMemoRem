@@ -1,0 +1,375 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+:root {
+  /* Dark Neumorphism Core Colors */
+  --bg-primary: #1A1F24; /* Deep cool matte slate */
+  --text-primary: #F8FAFC;
+  --text-muted: #94A3B8;
+  --accent-primary: #6C63FF; /* Soft Violet */
+  --accent-hover: #8B84FF; /* Lighter Violet */
+  --success: #38B2AC;
+  
+  /* Shadow Physics (Dark Mode translation) */
+  --shadow-light-rgb: 200, 200, 200;
+  --shadow-dark-rgb: 0, 0, 0;
+  
+  /* Typography */
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+/* ==========================================================================
+   NEUMORPHIC PHYSICS (The core UI system)
+   ========================================================================== */
+
+/* Standard Extruded Component (Cards, Modals) */
+.neu-extruded {
+  background: var(--bg-primary);
+  box-shadow: 
+    12px 12px 24px rgba(var(--shadow-dark-rgb), 0.45),
+    -12px -12px 24px rgba(var(--shadow-light-rgb), 0.03);
+  border-radius: 32px;
+  border: none;
+}
+
+/* Hover Lift */
+.neu-extruded-hover {
+  transition: all 300ms ease-out;
+}
+.neu-extruded-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    16px 16px 32px rgba(var(--shadow-dark-rgb), 0.5),
+    -16px -16px 32px rgba(var(--shadow-light-rgb), 0.04);
+}
+
+/* Base Button */
+.neu-button {
+  background: var(--bg-primary);
+  box-shadow: 
+    8px 8px 16px rgba(var(--shadow-dark-rgb), 0.4),
+    -8px -8px 16px rgba(var(--shadow-light-rgb), 0.03);
+  border-radius: 16px;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 300ms ease-out;
+}
+
+.neu-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    10px 10px 20px rgba(var(--shadow-dark-rgb), 0.5),
+    -10px -10px 20px rgba(var(--shadow-light-rgb), 0.04);
+}
+
+.neu-button:active {
+  transform: translateY(1px);
+  box-shadow: 
+    inset 4px 4px 8px rgba(var(--shadow-dark-rgb), 0.4),
+    inset -4px -4px 8px rgba(var(--shadow-light-rgb), 0.02);
+}
+
+/* Primary Button (Accent color) */
+.neu-button-primary {
+  background: linear-gradient(135deg, #6C63FF, #8B5CF6, #6C63FF); /* Soft Violet to Neon Purple */
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+  box-shadow: 
+    6px 6px 12px rgba(0, 0, 0, 0.4),
+    -6px -6px 12px rgba(var(--shadow-light-rgb), 0.1);
+  color: #fff;
+}
+.neu-button-primary:hover {
+  background-position: 100% 50%;
+  box-shadow: 
+    8px 8px 16px rgba(0, 0, 0, 0.5),
+    -8px -8px 16px rgba(var(--shadow-light-rgb), 0.15);
+}
+.neu-button-primary:active {
+  box-shadow: 
+    inset 4px 4px 8px rgba(0, 0, 0, 0.3),
+    inset -4px -4px 8px rgba(255, 255, 255, 0.1);
+}
+
+/* Deep Inset (Inputs, Textareas, Icon Wells) */
+.neu-inset-deep {
+  background: var(--bg-primary);
+  box-shadow: 
+    inset 8px 8px 16px rgba(var(--shadow-dark-rgb), 0.5),
+    inset -8px -8px 16px rgba(var(--shadow-light-rgb), 0.03);
+  border-radius: 16px;
+  border: none;
+  color: var(--text-primary);
+}
+
+.neu-inset-deep:focus {
+  outline: none;
+  box-shadow: 
+    inset 10px 10px 20px rgba(var(--shadow-dark-rgb), 0.6),
+    inset -10px -10px 20px rgba(var(--shadow-light-rgb), 0.04),
+    0 0 0 2px var(--bg-primary),
+    0 0 0 4px var(--accent-primary);
+}
+
+/* Shallow Inset (Tracks, Pills, Sidebar Active states) */
+.neu-inset {
+  background: var(--bg-primary);
+  box-shadow: 
+    inset 4px 4px 8px rgba(var(--shadow-dark-rgb), 0.4),
+    inset -4px -4px 8px rgba(var(--shadow-light-rgb), 0.02);
+  border-radius: 12px;
+}
+
+/* ==========================================================================
+   LAYOUT STRUCTURE
+   ========================================================================== */
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 300px;
+  background: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+  z-index: 10;
+  border-right: none; /* Neumorphism relies on shadows */
+  box-shadow: 
+    8px 0 16px rgba(var(--shadow-dark-rgb), 0.2);
+}
+
+.sidebar-header {
+  margin-bottom: 2rem;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar-content::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.2);
+  border-radius: 99px;
+}
+
+.workspace-item {
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  transition: all 300ms ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.workspace-item:hover {
+  color: var(--text-primary);
+}
+.workspace-item.active {
+  color: var(--text-primary);
+  /* Use shallow inset for active state */
+  box-shadow: 
+    inset 4px 4px 8px rgba(var(--shadow-dark-rgb), 0.4),
+    inset -4px -4px 8px rgba(var(--shadow-light-rgb), 0.02);
+}
+
+/* Main Area */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  background: var(--bg-primary);
+  padding: 2rem;
+}
+
+.main-header {
+  margin-bottom: 1rem;
+}
+
+.view-container {
+  max-width: 50rem;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   FORMS & INPUTS
+   ========================================================================== */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.input-group label {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  margin-left: 0.5rem;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea {
+  width: 100%;
+  padding: 0.85rem 1.25rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  border: none;
+  /* Deep inset for inputs */
+  box-shadow: 
+    inset 8px 8px 16px rgba(var(--shadow-dark-rgb), 0.5),
+    inset -8px -8px 16px rgba(var(--shadow-light-rgb), 0.03);
+  border-radius: 16px;
+  transition: all 300ms ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: 
+    inset 10px 10px 20px rgba(var(--shadow-dark-rgb), 0.6),
+    inset -10px -10px 20px rgba(var(--shadow-light-rgb), 0.04),
+    0 0 0 2px var(--bg-primary),
+    0 0 0 4px var(--accent-primary);
+}
+
+/* ==========================================================================
+   SPECIFIC COMPONENTS
+   ========================================================================== */
+
+.step-card {
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Nested depth feature: Extruded card -> Inset icon well */
+.step-number {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--accent-primary);
+  /* Deep inset well for the number */
+  box-shadow: 
+    inset 6px 6px 12px rgba(var(--shadow-dark-rgb), 0.5),
+    inset -6px -6px 12px rgba(var(--shadow-light-rgb), 0.03);
+}
+
+.upload-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 300ms ease-out;
+  /* Shallow inset to look like a drop zone */
+  box-shadow: 
+    inset 8px 8px 16px rgba(var(--shadow-dark-rgb), 0.4),
+    inset -8px -8px 16px rgba(var(--shadow-light-rgb), 0.02);
+  border-radius: 24px;
+}
+
+.upload-zone:hover {
+  box-shadow: 
+    inset 10px 10px 20px rgba(var(--shadow-dark-rgb), 0.5),
+    inset -10px -10px 20px rgba(var(--shadow-light-rgb), 0.03);
+}
+
+/* Authentication Center */
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 1.5rem 2.5rem;
+}
+
+/* Utilities */
+.spin {
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--text-primary), var(--text-muted));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
