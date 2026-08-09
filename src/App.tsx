@@ -48,6 +48,8 @@ function App() {
   const [authPassword, setAuthPassword] = useState('');
   const [authName, setAuthName] = useState('');
 
+  const [errorMessage, setErrorMessage] = useState('');
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const step2Ref = useRef<HTMLDivElement>(null);
 
@@ -130,10 +132,10 @@ function App() {
 
   const handleAnalyzeFiles = async () => {
     if (uploadedFiles.length === 0) {
-      alert("Please upload some files first.");
+      setErrorMessage('Please select files to upload.');
       return;
     }
-
+    setErrorMessage('');
     setIsAnalyzing(true);
     try {
       const formData = new FormData();
@@ -171,7 +173,7 @@ function App() {
       
     } catch (err: any) {
       console.error(err);
-      alert("Failed to analyze. Ensure the backend server is running. Error: " + err.message);
+      setErrorMessage(err.message || "An error occurred during analysis.");
     } finally {
       setIsAnalyzing(false);
     }
@@ -214,8 +216,17 @@ function App() {
     setCurrentUser({ email: authEmail, name: authName });
   };
 
+  const handleGuestLogin = () => {
+    localStorage.removeItem(`omni-context-profiles-guest@hackathon.com`);
+    setCurrentUser({ email: 'guest@hackathon.com', name: 'Judge (Guest)' });
+  };
+
   const handleLogout = () => {
     setCurrentUser(null);
+    setProfiles([]);
+    setActiveProfileId('');
+    setAuthEmail('');
+    setAuthPassword('');
   };
 
   // =======================================================================
@@ -248,7 +259,17 @@ function App() {
             </button>
           </form>
 
-          <p style={{ textAlign: 'center', marginTop: '1.25rem', color: 'var(--text-muted)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', margin: '1.5rem 0' }}>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+            <span style={{ padding: '0 1rem', color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>OR</span>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+          </div>
+
+          <button onClick={handleGuestLogin} className="neu-button neu-extruded-hover" style={{ width: '100%', padding: '0.85rem', color: 'var(--success)', fontWeight: 600 }}>
+            Continue as Guest 🚀
+          </button>
+
+          <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--text-muted)' }}>
             Don't have an account? <span style={{ color: 'var(--accent-primary)', cursor: 'pointer', fontWeight: 600 }} onClick={() => setActiveView('signup')}>Sign up</span>
           </p>
         </div>
@@ -286,7 +307,17 @@ function App() {
             </button>
           </form>
 
-          <p style={{ textAlign: 'center', marginTop: '1.25rem', color: 'var(--text-muted)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', margin: '1.5rem 0' }}>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+            <span style={{ padding: '0 1rem', color: 'var(--text-muted)', fontSize: '0.85rem', fontWeight: 600 }}>OR</span>
+            <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }}></div>
+          </div>
+
+          <button onClick={handleGuestLogin} className="neu-button neu-extruded-hover" style={{ width: '100%', padding: '0.85rem', color: 'var(--success)', fontWeight: 600 }}>
+            Continue as Guest 🚀
+          </button>
+
+          <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--text-muted)' }}>
             Already have an account? <span style={{ color: 'var(--accent-primary)', cursor: 'pointer', fontWeight: 600 }} onClick={() => setActiveView('login')}>Log in</span>
           </p>
         </div>
@@ -462,6 +493,13 @@ function App() {
                     <p style={{ color: 'var(--text-muted)' }}>We support Native PDF Processing via Gemini Multimodal.</p>
                   </div>
 
+                  {errorMessage && (
+                    <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontWeight: 600 }}>{errorMessage}</span>
+                      <button onClick={() => setErrorMessage('')} style={{ background: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '1.2rem', padding: '0 0.5rem' }}>✕</button>
+                    </div>
+                  )}
+
                   {uploadedFiles.length > 0 && (
                     <div style={{ marginTop: '1rem', padding: '1rem' }} className="neu-inset">
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--success)', marginBottom: '0.75rem', fontWeight: 600 }}>
@@ -490,41 +528,48 @@ function App() {
                     <h2>Edit & Save Context</h2>
                   </div>
                   <p className="text-muted" style={{ marginBottom: '2rem' }}>Review the AI-extracted data. Your changes are automatically saved to your account.</p>
-                  
-                  <div className="form-group">
-                    <div className="input-group">
-                      <label>Tech Stack</label>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
+                    <div>
+                      <label className="text-muted" style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 600 }}>Project Name / Goal</label>
                       <input 
-                        type="text" 
-                        value={activeProfile.techStack}
-                        onChange={e => updateActiveProfile({ techStack: e.target.value })}
-                      />
-                    </div>
-
-                    <div className="input-group">
-                      <label>Overall Project Goal</label>
-                      <textarea 
-                        rows={2}
+                        className="neu-inset" 
                         value={activeProfile.overallGoal}
                         onChange={e => updateActiveProfile({ overallGoal: e.target.value })}
+                        placeholder="e.g. Build a decentralized voting app" 
+                        style={{ width: '100%', padding: '0.75rem 1rem', border: 'none', background: 'transparent', color: 'var(--text-primary)', borderRadius: '12px' }} 
                       />
                     </div>
 
-                    <div className="input-group">
-                      <label>Current Unsolved Problem</label>
+                    <div>
+                      <label className="text-muted" style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 600 }}>Tech Stack</label>
+                      <input 
+                        className="neu-inset" 
+                        value={activeProfile.techStack}
+                        onChange={e => updateActiveProfile({ techStack: e.target.value })}
+                        placeholder="e.g. React, Node, PostgreSQL" 
+                        style={{ width: '100%', padding: '0.75rem 1rem', border: 'none', background: 'transparent', color: 'var(--text-primary)', borderRadius: '12px' }} 
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-muted" style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 600 }}>Current Blocker / Task</label>
                       <textarea 
-                        rows={2}
+                        className="neu-inset" 
                         value={activeProfile.currentTask}
                         onChange={e => updateActiveProfile({ currentTask: e.target.value })}
+                        placeholder="e.g. API is returning 500 error on login." 
+                        style={{ width: '100%', minHeight: '120px', padding: '0.75rem 1rem', border: 'none', background: 'transparent', color: 'var(--text-primary)', borderRadius: '12px', resize: 'vertical' }} 
                       />
                     </div>
 
-                    <div className="input-group">
-                      <label style={{ color: 'var(--accent-primary)' }}>Notes for New AI Agent</label>
+                    <div>
+                      <label className="text-muted" style={{ display: 'block', marginBottom: '0.25rem', fontWeight: 600 }}>Handoff Notes for AI</label>
                       <textarea 
-                        rows={4}
+                        className="neu-inset" 
                         value={activeProfile.handoffNotes}
                         onChange={e => updateActiveProfile({ handoffNotes: e.target.value })}
+                        placeholder="e.g. We already tried using CORS middleware but it failed." 
+                        style={{ width: '100%', minHeight: '120px', padding: '0.75rem 1rem', border: 'none', background: 'transparent', color: 'var(--text-primary)', borderRadius: '12px', resize: 'vertical' }} 
                       />
                     </div>
                   </div>
